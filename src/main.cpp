@@ -8,38 +8,32 @@
 #include <signal.h>
 
 #include <ncurses.h>
+
 #include "libopz/opz_rtmidi.h"
 
+#include "osc.h"
 #include "tools.h"
+
 #include "pages.h"
 #include "mixer.h"
 #include "project.h"
 #include "tempo.h"
 #include "mic.h"
 
-std::string version = "0.1";
-std::string name = "oscLab";
-std::string header = name + " " + version + " by Patricio Gonzalez Vivo ( patriciogonzalezvivo.com )"; 
-
-T3::opz_rtmidi opz;
-std::atomic<bool> keepRunnig(true);
-
 std::vector<WINDOW*> windows;
-bool large_screen = false;
-bool change = true;
 
 void handle_winch(int sig) {
     endwin();
-
     refresh();
     for (size_t i = 0; i < windows.size(); i++)
         wrefresh(windows[i]);
-
     wresize( windows[5], LINES-2, COLS-80 );
 }
 
-
 int main(int argc, char** argv) {
+    std::atomic<bool> keepRunnig(true);
+
+    T3::opz_rtmidi opz;
     opz.connect();
     
     initscr();
@@ -61,6 +55,7 @@ int main(int argc, char** argv) {
     keypad(stdscr, TRUE);
     noecho();
 
+    bool large_screen = false;
     large_screen = (COLS >= 159); 
 
     windows.push_back( newwin(5, 41, 1, 0) );    //  PAGE ONE
@@ -75,6 +70,7 @@ int main(int argc, char** argv) {
 
     signal(SIGWINCH, handle_winch);
 
+    bool change = true;
     bool change_data = true;
     bool pressing_track = false;
     bool pressing_project = false;
@@ -92,6 +88,12 @@ int main(int argc, char** argv) {
         else if (_id == T3::KEY_TEMPO)      pressing_tempo = _value;
         else if (_id == T3::MICROPHONE_MODE_CHANGE) mic_on = _value != 0;
         else if (_id == T3::PATTERN_DOWNLOADED || _id == T3::PATTERN_CHANGE || _id == T3::TRACK_CHANGE || _id == T3::SEQUENCE_CHANGE || _id == T3::PAGE_CHANGE || _id == T3::PARAMETER_CHANGE ) change_data = true;
+    
+        send(_id, _value);
+    } );
+
+    opz.setMidiCallback( [](T3::midi_id _id, size_t _channel, size_t _key, size_t _value) {
+        send(_id, _channel, _key, _value);
     } );
 
     std::thread waitForKeys([&](){
@@ -115,8 +117,8 @@ int main(int argc, char** argv) {
         if (!change)
             continue;
 
-        T3::opz_track_id track_id = opz.getActiveTrackId();
         T3::opz_pattern pattern = opz.getActivePattern();
+        T3::opz_track_id track_id = opz.getActiveTrackId();
 
         std::string title_name = T3::toString(track_id);
 
@@ -135,7 +137,6 @@ int main(int argc, char** argv) {
             size_t step = (opz.getActiveStepId() / step_length) % step_count;
             mvprintw(LINES-4, 2 + step * 4 + ( (step/4) * 4 ) , "[ ]");
         }
-        
         
         for (size_t i = 0; i < step_count; i++) {
             size_t x = 3 + i * 4 + ( (i/4) * 4 );

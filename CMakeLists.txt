@@ -15,10 +15,13 @@ add_executable (oscLab
     ${ROOT_SOURCE}
 )
 
+include_directories(deps/libopz/deps)
+include_directories(deps/libopz/include)
+include_directories(deps/liblo)
 target_include_directories(oscLab PRIVATE
-    "${PROJECT_SOURCE_DIR}/deps/libopz/deps"
-    "${PROJECT_SOURCE_DIR}/deps/libopz/include"
+    # "${PROJECT_SOURCE_DIR}/deps/libopz/deps"
+    # "${PROJECT_SOURCE_DIR}/deps/libopz/include"
     "${PROJECT_SOURCE_DIR}/src"
 )
 
-target_link_libraries(oscLab PRIVATE libopz ncurses)
+target_link_libraries(oscLab PRIVATE libopz lo_static ncurses)

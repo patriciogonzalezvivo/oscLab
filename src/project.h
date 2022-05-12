@@ -2,6 +2,7 @@
 
 #include <ncurses.h>
 #include "libopz/opz_device.h"
+#include "osc.h"
 
 void draw_project(WINDOW* _win, T3::opz_device* _opz) {
     size_t project_id = _opz->getActiveProjectId();
@@ -46,6 +47,10 @@ void draw_project(WINDOW* _win, T3::opz_device* _opz) {
         size_t step_count = _opz->getTrackParameters(T3::opz_track_id(t) ).step_count;
         size_t step_length = _opz->getTrackParameters(T3::opz_track_id(t) ).step_length;
         size_t step = (step_current / step_length) % step_count;
+
+        if (step_count > 0)
+            send(trackUniformName(t) + "Pct", (float)step/(float)step_count);
+
         mvwprintw(_win,y, x_margin + name_width + step * step_width - 1, "[  ]");
         for (size_t s = 0; s < step_count; s++) {
             int x = x_margin + name_width + s * step_width;

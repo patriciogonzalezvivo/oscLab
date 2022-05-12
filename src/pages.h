@@ -2,6 +2,7 @@
 
 #include <ncurses.h>
 #include "libopz/opz_device.h"
+#include "tools.h"
 
 // PAGE 1: SOUND     
 void draw_page_one(WINDOW* _win, T3::opz_device* _opz) {
