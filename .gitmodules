@@ -1,0 +1,3 @@
+[submodule "deps/libopz"]
+	path = deps/libopz
+	url = git@github.com:patriciogonzalezvivo/libopz.git
