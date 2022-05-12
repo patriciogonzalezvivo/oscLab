@@ -44,8 +44,11 @@ void send(T3::opz_event_id _id, int _value) {
 }
 
 void send(T3::midi_id _id, size_t _channel, size_t _key, size_t _value) {
+    if (_channel == 0)
+        return;
+        
     if (_id == T3::NOTE_ON)
-        send(track_uniform_name[ 1 + _channel], _key/255.0f, _value/255.0f);
-    else if (_id == T3::NOTE_ON)
-        send(track_uniform_name[ 1 + _channel], 0.0f, 0.0f);
+        send(track_uniform_name[_channel - 1], _key/255.0f, _value/255.0f);
+    else if (_id == T3::NOTE_OFF)
+        send(track_uniform_name[_channel - 1], 0.0f, 0.0f);
 }
