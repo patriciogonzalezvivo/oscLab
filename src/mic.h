@@ -4,7 +4,7 @@
 #include "libopz/opz_device.h"
 
 void draw_mic(WINDOW* _win, T3::opz_device* _opz) {
-    wclear(_win);
+    werase(_win);
     box(_win, 0, 0);
     mvwprintw(_win, 1, 2, "MIC LEVEL                  MIC FX ");
     mvwprintw(_win, 2, 2, "%s                  %s", 

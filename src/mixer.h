@@ -6,7 +6,7 @@
 void draw_mixer(WINDOW* _win, T3::opz_device * _opz) {
     T3::opz_project_data project = _opz->getProjectData();
 
-    wclear(_win);
+    werase(_win);
     box(_win, 0, 0);
     mvwprintw(_win, 1, 2, "DRUMS               SYNTH                PUNCH                MASTER");
     mvwprintw(_win, 2, 2, "%03i                 %03i                  %03i                  %03i", 

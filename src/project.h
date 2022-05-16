@@ -13,7 +13,7 @@ void draw_project(WINDOW* _win, T3::opz_device* _opz) {
     int lines, cols;
     getmaxyx(_win, lines, cols);
 
-    wclear(_win);
+    werase(_win);
     box(_win, 0, 0);
 
     mvwprintw(_win, 0, 2, " PROJECT  %02i ", project_id);
@@ -48,8 +48,8 @@ void draw_project(WINDOW* _win, T3::opz_device* _opz) {
         size_t step_length = _opz->getTrackParameters(T3::opz_track_id(t) ).step_length;
         size_t step = (step_current / step_length) % step_count;
 
-        if (step_count > 0)
-            send(trackUniformName(t) + "Pct", (float)step/(float)step_count);
+        // if (step_count > 0)
+        //     send(trackUniformName(t) + "Pct", (float)step/(float)step_count);
 
         mvwprintw(_win,y, x_margin + name_width + step * step_width - 1, "[  ]");
         for (size_t s = 0; s < step_count; s++) {

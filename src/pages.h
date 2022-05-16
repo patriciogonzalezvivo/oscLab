@@ -25,7 +25,7 @@ void draw_page_two(WINDOW* _win, T3::opz_device* _opz) {
     size_t track_id = _opz->getActiveTrackId();
     size_t page_id = _opz->getActivePageId();
 
-    wclear(_win);
+    werase(_win);
 
     if (page_id == 1) wattron(_win, COLOR_PAIR(1));
     box(_win, 0, 0);

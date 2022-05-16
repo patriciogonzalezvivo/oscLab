@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
     windows.push_back( newwin(8, 41, 6, 0) );    //  PAGE TWO
     windows.push_back( newwin(5, 66, 14, 0) );   //  PAGE THREE
     windows.push_back( newwin(13, 25, 1, 41) );  //  PAGE FOUR
-
+    
     windows.push_back( newwin(18, 14, 1, 66) );  //  STEP / NOTE
     
     // Extra window that can be display on the side or on top of the pages depending of the size of the terminal
@@ -127,7 +127,7 @@ int main(int argc, char** argv) {
         else if (pressing_mixer)   title_name = "MIXER";
         else if (pressing_tempo)   title_name = "TEMPO";
 
-        clear();
+        erase();
         mvprintw(0, COLS/2 - title_name.size()/2, "%s", title_name.c_str() );
 
         size_t step_count = opz.getActiveTrackParameters().step_count;
@@ -156,14 +156,14 @@ int main(int argc, char** argv) {
         mvprintw(LINES-1, COLS/2 - 3, "%s %02i", ((opz.isPlaying())? "|> " : "[ ]"), opz.getActiveStepId() + 1 );
         refresh();
 
-        if (pressing_project)  draw_project(windows[5], &opz);
+        if (pressing_project)       draw_project(windows[5], &opz);
         else if (pressing_mixer)    draw_mixer(windows[5], &opz);
         else if (pressing_tempo)    draw_tempo(windows[5], &opz);
-        else if (mic_on) draw_mic(windows[5], &opz);
-        else if (large_screen)  draw_project(windows[5], &opz);
+        else if (mic_on)            draw_mic(windows[5], &opz);
+        else if (large_screen)      draw_project(windows[5], &opz);
 
         if ( large_screen || (!mic_on && !pressing_project && !pressing_mixer && !pressing_tempo)){
-            // wclear(windows[5]);
+            // werase(windows[5]);
 
             if (pressing_track)
                 wattron(windows[4], COLOR_PAIR(2));

@@ -37,7 +37,6 @@ void send(const std::string& _folder, const std::string& _value) {
     lo_message_free(m);
 }
 
-
 void send(T3::opz_event_id _id, int _value) {
     if (_id == T3::STEP_ZERO)
         send("streams", "restart");
