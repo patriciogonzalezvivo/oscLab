@@ -89,7 +89,7 @@ int main(int argc, char** argv) {
         else if (_id == T3::MICROPHONE_MODE_CHANGE) mic_on = _value != 0;
         else if (_id == T3::PATTERN_DOWNLOADED || _id == T3::PATTERN_CHANGE || _id == T3::TRACK_CHANGE || _id == T3::SEQUENCE_CHANGE || _id == T3::PAGE_CHANGE || _id == T3::PARAMETER_CHANGE ) change_data = true;
     
-        send(_id, _value);
+        // send(_id, _value);
     } );
 
     opz.setMidiCallback( [](T3::midi_id _id, size_t _channel, size_t _key, size_t _value) {
